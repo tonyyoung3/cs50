@@ -1,0 +1,1 @@
+SELECT count(*) count FROM "ratings" WHERE "rating" = 10

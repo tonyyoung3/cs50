@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <table class="table">
+        <thead>
+          <th scope="col">action</th>
+          <th scope="col">date</th>
+          <th scope="col">stock</th>
+          <th scope="col">price</th>
+          <th scope="col">quantity</th>
+        </thead>
+    {% for row in rows %}
+
+        <tbody>
+            <tr>
+            {% if row["buy"] %}
+            <td>BUY</td>
+            {% else %}
+            <td>SELL</td>
+            {% endif %}
+            <td>{{row["date"]}}</td>
+            <td>{{row["stock"]}}</td>
+            <td>{{row["price"]}}</td>
+            <td>{{row["quantity"]}}</td>
+            </tr>
+        </tbody>
+
+    {% endfor %}
+    </table>
+
+
+
+{% endblock %}

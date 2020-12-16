@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+        <div class="form-group" style="margin-bottom: 20px;">
+            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="symbol" type="text" id="symbol">
+
+        <button class="btn btn-primary" id="btn"  >get quote</button>
+        <p id = 'alert' style="color:red"></p>
+        </div>
+
+    <table class="table" >
+        <thead>
+          <th scope="col" >stock</th>
+          <th scope="col" >price</th>
+        </thead>
+        <tbody>
+            <tr>
+            <td id = "stock"></td>
+            <td id = "price"></td>
+            </tr>
+        </tbody>
+
+    </table>
+    <ul class="navbar-nav mr-auto mt-2">
+    <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
+    </ul>
+
+    <canvas id="myChart" width="100" height="50">
+    </canvas>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <script>
+        // console.log("1")
+        const searchBtn = document.getElementById('btn')
+        const stock = document.getElementById('stock')
+        const price = document.getElementById('price')
+        const alert = document.getElementById('alert')
+        searchBtn.addEventListener('click', event => {
+            let symbol = document.getElementById('symbol').value
+            let date = []
+            let close = []
+
+
+            $.post("/price/"+symbol,{}, function(data){
+            console.log(data);
+
+            for(i=0; i< data.length;i++){
+                date.push(data[i]["date"])
+                close.push(data[i]["close"])
+            }
+
+            },"json").then(function(){
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels:date,
+                datasets: [{
+                    label: 'My First dataset',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: close
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                                }
+                            }]
+                        }
+
+                    }
+            });
+
+            });
+
+
+
+
+          })
+
+        searchBtn.addEventListener('click', event => {
+            let symbol = document.getElementById('symbol').value
+            console.log(stock.innerText)
+
+            console.log(stock.innerText)
+            $.post("/quote/"+symbol,{}, function(data){
+                if (data == 1){
+                    alert.innerText = 'invalid quote'
+                }else{
+                    console.log(2);
+                    console.log(data);
+                    stock.innerText = symbol
+                    if (data["latestPrice"]){
+                    price.innerText = data["latestPrice"]
+                    }else{
+                        price.innerText = 'price not available'
+                    }
+                }
+            },"json")
+
+        })
+
+
+
+
+
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <form method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="symbol" type="text">
+            <input autocomplete="off" autofocus class="form-control" name="quantity" placeholder="quantity" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit" formaction="/buy"> buy </button>
+        <button class="btn btn-primary" type="submit" formaction="/sell"> sell </button>
+    </form>
+
+    {% if status %}
+        <p> order success</p>
+    {% endif %}
+
+{% endblock %}

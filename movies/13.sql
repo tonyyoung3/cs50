@@ -1,0 +1,1 @@
+select distinct d.name from movies a inner join stars b on a.id = b.movie_id inner join people d on b.person_id = d.id where movie_id in ( select movie_id from movies a inner join stars b on a.id = b.movie_id inner join people d on b.person_id = d.id and d.name = 'Kevin Bacon' and birth = 1958 ) and d.name <> 'Kevin Bacon'

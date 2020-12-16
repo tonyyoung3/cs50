@@ -1,0 +1,278 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+<div  class="container" >
+    <div style="margin-bottom: 50px;" class="row" id = 'con'>
+        <div class="col d-flex flex-wrap align-content-stretch mb-5">
+        <div class="card flex-fill">
+          <div class="card-header">
+            Position
+          </div>
+          <div class="card-body" >
+            <table class="table">
+            <thead class="thead-dark">
+              <th ><input type="checkbox" name="name1" onclick="checkall()" />  </th>
+              <th scope="col">stock</th>
+              <th scope="col">quantity</th>
+            </thead>
+        {% for row in rows %}
+
+            <tbody >
+                <tr >
+                <td><input type="checkbox" class= 'check' name="{{stock}}" /> </th></td>
+                <td class ='quote'>{{row["stock"]}}</td>
+                <td class='quant'>{{row["quantity"]}}</td>
+                </tr>
+            </tbody>
+
+        {% endfor %}
+        </table>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+          Sell selected
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Alert</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure to sell selected stocks ?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sell()">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--<button type="button" class="btn btn-danger" onclick="sell()">sell selected</button>-->
+          </div>
+        </div>
+
+        </div>
+        <div class="col mb-5">
+            <div class="card">
+              <div class="card-header">
+                chart
+              </div>
+              <div class="card-body">
+                <canvas id="myChart" width="400" height="300"></canvas>
+
+              </div>
+            </div>
+
+        </div>
+
+        <div class="col mb-5">
+            <div class="card">
+                  <div class="card-header">
+                    Performance
+                  </div>
+                  <div class="card-body">
+                    <canvas id="perf" width="400" height="300">
+                        </canvas>
+
+            <button type="button" class="  btn btn-primary ml-5 " onclick = "performance(3)" >3M</button>
+            <button type="button" class="  btn btn-primary ml-5"  onclick = "performance(6)" =>6M</button>
+            <button type="button" class="  btn btn-primary ml-5"  onclick = "performance(0)" =>All</button>
+
+                  </div>
+
+            </div>
+
+        </div>
+        <div class="col ">  </div>
+
+        </div>
+
+
+
+</div>
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-piechart-outlabels"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
+
+    <script>
+        let stock = []
+        let sum = []
+        let date=[]
+        let perf = []
+
+
+        $.post("/position", function(data){
+            console.log(data);
+
+            for(i=0; i< data.length-1;i++){
+                stock.push(data[i]["stock"])
+                sum.push(data[i]["total"])
+        }
+
+        // console.log(data[data.length - 1])
+        stock.push(data[data.length-1]["cash"])
+        sum.push(data[data.length -1]["total"])
+        }).then(function(){
+            // console.log(stock)
+            // console.log(sum)
+
+
+            new Chart(document.getElementById("myChart"),
+            {
+              "type":"doughnut",
+              "data":
+                {
+                 "labels":stock,
+                 "datasets":
+                    [
+                        {"label":"My First Dataset",
+                         "data":sum,
+                         "backgroundColor":["rgb(255, 99, 132)","rgb(54, 162, 235)","rgb(255, 205, 86)"]
+
+                        }
+                    ]
+
+                },
+                "options":{
+                            "layout": {
+                                    padding: {
+                                        left: 50,
+                                        right: 50,
+                                        top: 50,
+                                        bottom: 50
+                                    }
+                                    },
+                            "rotation": (0.5 * Math.PI) - (80/180 * Math.PI),
+                             "plugins": {
+                                        // "datalabels": {
+                                        //     formatter: (value, ctx) => {
+
+                                        //       let sum = 0;
+                                        //       let dataArr = ctx.chart.data.datasets[0].data;
+                                        //       dataArr.map(data => {
+                                        //           sum += data;
+                                        //       });
+                                        //       let percentage = (value*100 / sum).toFixed(2)+"%";
+                                        //       return percentage;
+
+
+                                        //     },
+                                            // color: '#fff',
+                                            //         },
+                                            "legend": false,
+                                            "outlabels": {
+                                                   text: '%l %p',
+                                                   color: 'white',
+                                                   stretch: 15,
+                                                   font: {
+                                                       resizable: true,
+                                                       minSize: 12,
+                                                       maxSize: 18
+                                                   }
+                                                }
+                                            }
+                            }
+
+
+        });
+
+
+
+        })
+
+        function checkall(){
+                            // console.log(document.getElementsByClassName("check"))
+                            // console.log(document.getElementsByName("name1")[0])
+
+                            var ck = document.getElementsByClassName("check");
+                            console.log(ck.length)
+                            var ckAll = document.getElementsByName("name1")[0];
+                            // ckALL.checked = !ckALL.checked
+
+                            for (i=0 ; i < ck.length ; i++){
+                                 ck[i].checked = ckAll.checked;
+                            }
+
+
+                            // for(i=0;i＜ck.length;i++){
+                            //     console.log(ck[i])
+                            //     // ck[i].checked = ckAll.checked;
+                            //     }
+                            }
+        function sell_all(x){
+
+                            $.post("/sellall/"+ x , function(data){
+
+                                console.log(data)
+
+
+                            })
+        }
+
+        function sell(){
+
+                            var ck = document.getElementsByClassName("check");
+                            var quant = document.getElementsByClassName("quant");
+                            var quote = document.getElementsByClassName("quote");
+
+
+
+                            for (i=0 ; i < ck.length ; i++){
+                                 if(ck[i].checked){
+                                     ck[i].disabled = true
+                                     ck[i].checked = false
+
+                                     console.log(quant[i].textContent)
+                                     console.log(quote[i].textContent)
+                                     let x = quote[i].textContent
+                                     sell_all(x)
+                                     quant[i].textContent = 0
+                            }
+                            }
+        }
+
+        var dragulaKanban = dragula([
+          document.querySelector('#con')
+        ]
+        )
+
+        function performance(range) {  $.post("/perf/" + range, function(data){
+            console.log(data);
+                date = []
+                perf = []
+
+            for(i=0; i< data.length;i++){
+
+                date.push(data[i]["date"])
+                perf.push(data[i]["perf"])
+            }
+            }).then(function(){
+                new Chart(document.getElementById("perf"),
+                            {"type":"line","data":{"labels":date,
+                            "datasets":[{"label":"My First Dataset","data":perf,"fill":false,"borderColor":"rgb(75, 192, 192)","lineTension":0.1}]},
+                            "options":{}});
+            })
+        }
+
+        performance(3)
+    </script>
+
+
+{% endblock %}

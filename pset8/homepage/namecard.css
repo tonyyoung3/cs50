@@ -1,0 +1,38 @@
+body {
+  padding : 20px
+}
+
+.outcome_style{
+  border-style:solid;
+  margin-top:30px;
+  width : 800px;
+  height : 400px
+
+}
+
+#outcome {
+  padding : 20px
+}
+
+.para {
+  float: left;
+}
+
+.pic {
+  float: right;
+}
+
+.clearfix {
+  clear: both;
+}
+
+.dark{
+  background-color:black;
+  color:white
+}
+
+.light{
+  border-color : grey;
+  background-color:white;
+  color:black
+}

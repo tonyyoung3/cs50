@@ -1,0 +1,1 @@
+SELECT c.name FROM "movies" a inner join stars b on a.id = b.movie_id inner join people c on b.person_id = c.id WHERE "title" = 'Toy Story'

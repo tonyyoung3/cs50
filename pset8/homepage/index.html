@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <title>My Webpage</title>
+    </head>
+    <body>
+       <nav class="navbar navbar-expand-md navbar-light bg-light border">
+            <a class="navbar-brand" href="/"><span >My work</span></a>
+            <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/todo">todo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/color">hex converter</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/namecard">name card</a></li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                    </ul>
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+  <div class="my-card border p-4 clearfix">
+    <img src="https://via.placeholder.com/200" alt="Avatar" class="rounded float-right pr-3" width="200">
+    <h3 class="my-name text-uppercase">My Name</h3>
+    <p class="info">Experienced Quality Controller with data management skills. Dedicate to deliver outcome fitting users' needs with a tight schedule and limited resources.
+
+</p>
+
+    <div class="experience" class="text-mute">
+      <h6>Experience</h6>
+      <ul class="list-unstyled small">
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+    let name = document.querySelector(".my-name")
+let experience = document.querySelector(".experience")
+let img = document.querySelector("img")
+
+name.innerText = "Tony"
+
+
+let inforCharge = document.createElement('li')
+inforCharge.innerHTML = 'CathaySec'
+experience.append(inforCharge)
+
+let CathaySec = document.createElement('li')
+CathaySec.innerHTML = 'FTSE Russell'
+experience.append(CathaySec)
+
+img.src = "https://assets-lighthouse.s3.amazonaws.com/uploads/user/photo/1411/medium___.jpg"
+</script>
+    </body>
+</html>
