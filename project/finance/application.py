@@ -55,7 +55,7 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+    base_URL = "https://cloud.iexapis.com/stable/stock/"
 
 
     rows = db.execute("SELECT * FROM users WHERE id = :id",
@@ -64,7 +64,7 @@ def buy():
     cash = rows[0]["cash"]
 
     if request.method == "POST":
-        base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+        base_URL = "https://cloud.iexapis.com/stable/stock/"
         symbol = request.form.get("symbol") + "/quote?token="
         URL = base_URL + symbol + API_KEY
 
@@ -168,7 +168,7 @@ def register():
 
         row_id = db.execute("SELECT count(*) as num FROM users")[0]["num"]
         db.execute("INSERT INTO users (id , username , hash) VALUES ( :id , :username , :hash)",
-                    id = row_id , username =request.form.get("username") , hash = generate_password_hash(request.form.get("password")) )
+                    id = row_id+1 , username =request.form.get("username") , hash = generate_password_hash(request.form.get("password")) )
 
         # Remember which user has logged in
         rows_after = db.execute("SELECT * FROM users WHERE username = :username",
@@ -205,7 +205,7 @@ def quote():
 @app.route("/quote/<quote>", methods=["POST"])
 @login_required
 def quote_p(quote):
-        base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+        base_URL = "https://cloud.iexapis.com/stable/stock/"
         symbol = quote + "/quote?token="
         URL = base_URL + symbol + API_KEY
 
@@ -219,7 +219,7 @@ def quote_p(quote):
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+    base_URL = "https://cloud.iexapis.com/stable/stock/"
 
 
 
@@ -242,7 +242,7 @@ def sell():
             else:
                 quantity = rows_buy[0]["quantity"]
 
-        base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+        base_URL = "https://cloud.iexapis.com/stable/stock/"
         symbol = request.form.get("symbol") + "/quote?token="
         URL = base_URL + symbol + API_KEY
         data = requests.get(URL).json()
@@ -305,7 +305,7 @@ def position():
 @app.route("/sellall/<quote>", methods=[ "POST"])
 @login_required
 def sellall(quote):
-    base_URL = "https://cloud-sse.iexapis.com/stable/stock/"
+    base_URL = "https://cloud.iexapis.com/stable/stock/"
 
     if request.method == "POST":
 
